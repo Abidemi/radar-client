@@ -5,6 +5,7 @@
     'LocalStorageModule',
     'ui.router',
     'radar.account',
+    'radar.akiProcessMeasures',
     'radar.auth',
     'radar.cohorts',
     'radar.consultants',
