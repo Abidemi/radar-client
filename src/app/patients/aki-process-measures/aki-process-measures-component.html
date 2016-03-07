@@ -1,0 +1,214 @@
+<div loading="loading" crud>
+  <div ng-if="viewing">
+    <p>
+      <span crud-list-button></span>
+      <span crud-edit-button item="item"></span>
+    </p>
+
+    <table class="table properties">
+      <tr>
+        <th>Source</th>
+        <td>{{item.getSource()}}</td>
+      </tr>
+
+      <tr>
+        <th>Date</th>
+        <td>{{item.date | dateFormat}}</td>
+      </tr>
+
+      <tr>
+        <th>Urine tested within 24 hours?</th>
+        <td><span tick="item.dipstickUrinalysis"></span></td>
+      </tr>
+
+      <tr>
+        <th>Medications reviewed?</th>
+        <td><span tick="item.medicationReview"></span></td>
+      </tr>
+
+      <tr>
+        <th>Ultrasound scan within 24 hours?</th>
+        <td><span tick="item.uss"></span></td>
+      </tr>
+
+      <tr>
+        <th>Senior review within 12 hours?</th>
+        <td><span tick="item.seniorReview"></span></td>
+      </tr>
+
+      <tr>
+        <th>Self-management information provided?</th>
+        <td><span tick="item.selfManagement"></span></td>
+      </tr>
+
+      <tr>
+        <th>Physiological monitoring plan decided?</th>
+        <td><span tick="item.physiologicalMonitoring"></span></td>
+      </tr>
+
+      <tr>
+        <th>U&amp;Es performed at admission?</th>
+        <td><span tick="item.ueAdmission"></span></td>
+      </tr>
+
+      <tr>
+        <th>U&amp;Es repeated within 24 hours?</th>
+        <td><span tick="item.ueRepeated"></span></td>
+      </tr>
+    </table>
+
+    <div metadata item="item"></div>
+  </div>
+
+  <div ng-if="editing">
+    <p>
+      <span crud-list-button></span>
+      <span crud-view-button item="originalItem"></span>
+    </p>
+
+    <form class="form-horizontal form-container" crud-submit="saveAndList()" novalidate>
+      <div frm-field frm-group>
+        <div frm-label>Source</div>
+
+        <div frm-control>
+          <div frm-source-group-field patient="patient" model="item.sourceGroup" required="true"></div>
+          <div frm-errors errors="item.errors.sourceGroup"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Date</div>
+
+        <div frm-control>
+          <div frm-date-field model="item.date"></div>
+          <div frm-errors errors="item.errors.date"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Urine tested within 24 hours?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.dipstickUrinalysis"></div>
+          <div frm-help>Was a dipstick urinalysis test performed within 24 hours of the first AKI alert?</div>
+          <div frm-errors errors="item.errors.dipstickUrinalysis"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Medications reviewed?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.medicationReview"></div>
+          <div frm-help>Were the medications reviewed? Blood pressure medications should be stopped.</div>
+          <div frm-errors errors="item.errors.medicationReview"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Ultrasound scan within 24 hours?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.uss"></div>
+          <div frm-help>Was an ultrasound scan performed within 24 hours of the first AKI alert.</div>
+          <div frm-errors errors="item.errors.uss"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Senior review within 12 hours?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.seniorReview"></div>
+          <div frm-help>Discussion by specialists within 12 hours of the first AKI alert.</div>
+          <div frm-errors errors="item.errors.seniorReview"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Self-management information provided? </div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.selfManagement"></div>
+          <div frm-help>Was the patient (and where appropriate their carers) supplied with self-management information?</div>
+          <div frm-errors errors="item.errors.selfManagement"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Physiological monitoring plan decided?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.physiologicalMonitoring"></div>
+          <div frm-errors errors="item.errors.physiologicalMonitoring"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>U&amp;Es performed at admission?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.ueAdmission"></div>
+          <div frm-help>Was a urea and electrolytes test performed at admission?</div>
+          <div frm-errors errors="item.errors.ueAdmission"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>U&amp;Es repeated within 24 hours?</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.ueRepeated"></div>
+          <div frm-help>Was a urea and electrolytes test repeated within 24 hours of the first AKI alert?</div>
+          <div frm-errors errors="item.errors.ueRepeated"></div>
+        </div>
+      </div>
+
+      <div frm-buttons>
+        <span crud-save-button></span>
+        <span crud-cancel-list-button></span>
+      </div>
+    </form>
+  </div>
+
+  <div ng-if="!viewing && !editing" list-helper="items as page" list-helper-options="{perPage: 10, sortBy: 'date', reverse: true}">
+    <p>
+      <span crud-create-button action="create()"></span>
+    </p>
+
+    <div filter-helper></div>
+
+    <div ng-show="!page.getCount()">
+      <p>No results.</p>
+    </div>
+
+    <table class="table table-condensed table-striped" ng-if="page.getCount()">
+      <thead>
+        <tr>
+          <th></th>
+          <th sort-helper="date">Date</th>
+          <th sort-helper="getSource()">Source</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr ng-repeat="item in page.getItems()">
+          <td>
+            <span crud-list-view-button item="item"></span>
+            <span crud-list-edit-button item="item"></span>
+          </td>
+
+          <td>{{item.date | dateFormat}}</td>
+          <td class="source">{{item.getSource()}}</td>
+
+          <td>
+            <span crud-list-remove-button item="item"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div pagination-helper></div>
+  </div>
+</div>

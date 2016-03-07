@@ -5,6 +5,7 @@
     'ui.router',
     'radar.store',
     'radar.patients.addresses',
+    'radar.patients.akiProcessMeasures',
     'radar.patients.aliases',
     'radar.patients.alport',
     'radar.patients.cohorts',

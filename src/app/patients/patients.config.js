@@ -65,6 +65,7 @@
 
     return {
       ADDRESSES: patientPage('Addresses', 'patient.addresses'),
+      AKI_PROCESS_MEASURES: patientPage('AKI Process Measures', 'patient.akiProcessMeasures'),
       ALIASES: patientPage('Aliases', 'patient.aliases'),
       ALPORT_CLINICAL_PICTURES: patientPage('Clinical Pictures', 'patient.alportClinicalPictures'),
       DEMOGRAPHICS: patientPage('Demographics', 'patient.demographics'),
