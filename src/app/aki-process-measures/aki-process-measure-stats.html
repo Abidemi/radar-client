@@ -1,0 +1,78 @@
+<table class="table table-condensed table-striped">
+  <tr>
+    <th>Process Measure</th>
+    <th>Numerator</th>
+    <th>Denominator</th>
+    <th>SEC Rate</th>
+  </tr>
+
+  <tr>
+    <td>Urine tested within 24 hours?</td>
+    <td>{{data.dipstickUrinalysis[0]}}</td>
+    <td>{{data.dipstickUrinalysis[1]}}</td>
+    <td>{{data.dipstickUrinalysis[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>Medications reviewed?</td>
+    <td>{{data.medicationReview[0]}}</td>
+    <td>{{data.medicationReview[1]}}</td>
+    <td>{{data.medicationReview[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>Ultrasound scan within 24 hours?</td>
+    <td>{{data.uss[0]}}</td>
+    <td>{{data.uss[1]}}</td>
+    <td>{{data.uss[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>Senior review within 12 hours?</td>
+    <td>{{data.seniorReview[0]}}</td>
+    <td>{{data.seniorReview[1]}}</td>
+    <td>{{data.seniorReview[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>Self-management information provided?</td>
+    <td>{{data.selfManagement[0]}}</td>
+    <td>{{data.selfManagement[1]}}</td>
+    <td>{{data.selfManagement[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>Physiological monitoring plan decided?</td>
+    <td>{{data.physiologicalMonitoring[0]}}</td>
+    <td>{{data.physiologicalMonitoring[1]}}</td>
+    <td>{{data.physiologicalMonitoring[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>U&amp;Es performed at admission?</td>
+    <td>{{data.ueAdmission[0]}}</td>
+    <td>{{data.ueAdmission[1]}}</td>
+    <td>{{data.ueAdmission[2] | number:2}}%</td>
+  </tr>
+
+  <tr>
+    <td>U&amp;Es repeated within 24 hours?</td>
+    <td>{{data.ueRepeated[0]}}</td>
+    <td>{{data.ueRepeated[1]}}</td>
+    <td>{{data.ueRepeated[2] | number:2}}%</td>
+  </tr>
+
+  <tr class="total">
+    <td>Composite Quality Score (CQS)</td>
+    <td>{{data.cqs[0]}}</td>
+    <td>{{data.cqs[1]}}</td>
+    <td>{{data.cqs[2] | number:2}}%</td>
+  </tr>
+
+  <tr class="total">
+    <td>Appropriate Care Score (ACS)</td>
+    <td>{{data.acs[0]}}</td>
+    <td>{{data.acs[1]}}</td>
+    <td>{{data.acs[2] | number:2}}%</td>
+  </tr>
+</table>
