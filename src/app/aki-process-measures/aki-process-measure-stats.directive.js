@@ -37,12 +37,17 @@
         function update(hospital) {
           data.loading2 = true;
 
-          if (!hospital) {
-            data.loading2 = false;
-            return;
+          var params = {};
+          var title;
+
+          if (hospital) {
+            params.group = hospital;
+            title = hospital.shortName;
+          } else {
+            title = 'All';
           }
 
-          adapter.get('/aki-process-measure-stats').then(function(response) {
+          adapter.get('/aki-process-measure-stats', params).then(function(response) {
             var stats = response.data;
 
             // Calculate percentages
@@ -51,6 +56,7 @@
               value.push(percent);
             });
 
+            data.title = title;
             data.data = stats;
             data.loading2 = false;
           });

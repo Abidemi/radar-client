@@ -1,10 +1,12 @@
 <div loading="data.loading1">
   <p>
-    <select class="form-control" ng-options="x as x.shortName for x in data.hospitals track by x.id" ng-model="data.hospital"></select>
+    <select class="form-control" ng-options="x as x.shortName for x in data.hospitals track by x.id" ng-model="data.hospital">
+      <option value="">All</option>
+    </select>
   </p>
 
-  <div ng-if="data.hospital" loading="data.loading2">
-    <div aki-process-measure-graph title="{{data.hospital.shortName}}" data="data.data"></div>
+  <div loading="data.loading2">
+    <div aki-process-measure-graph title="data.title" data="data.data"></div>
     <div aki-process-measure-table data="data.data"></div>
   </div>
 </div>

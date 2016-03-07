@@ -27,7 +27,7 @@
 
     return {
       scope: {
-        title: '@',
+        title: '=',
         data: '='
       },
       link: function(scope, element) {
@@ -65,6 +65,9 @@
               max: 100,
               title: {
                 text: null,
+              },
+              labels: {
+                format: '{value}%'
               }
             },
             tooltip: {
