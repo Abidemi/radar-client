@@ -22,17 +22,11 @@
 
         hospitalStore.findMany().then(function(hospitals) {
           hospitals = sortHospitals(hospitals);
-
           data.hospitals = hospitals;
-
-          if (hospitals.length > 0) {
-            data.hospital = hospitals[0];
-          }
-
           data.loading1 = false;
-
-          scope.$watch('data.hospital', update);
         });
+
+        scope.$watch('data.hospital', update);
 
         function update(hospital) {
           data.loading2 = true;
