@@ -52,7 +52,10 @@
 
             // Calculate percentages
             _.forEach(stats, function(value, key) {
-              var percent = 100 * value[0] / value[1];
+              var x = value[0];
+              var y = value[1];
+
+              var percent = y == 0 ? 0 : 100 * x / y;
               value.push(percent);
             });
 
