@@ -13,6 +13,10 @@
 
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav" ng-if="isAuthenticated">
+        <li ui-sref-active="active">
+          <a ui-sref="akiProcessMeasures">AKI Process Measures</a>
+        </li>
+
         <li ng-if="user.isAdmin || user.getCohorts().length > 5" ui-sref-active="active">
           <a ui-sref="cohorts">Cohorts</a>
         </li>
@@ -63,10 +67,6 @@
 
         <li ui-sref-active="active">
           <a ui-sref="stats">Stats</a>
-        </li>
-
-        <li ui-sref-active="active">
-          <a ui-sref="akiProcessMeasures">AKI Process Measures</a>
         </li>
 
         <li ui-sref-active="active" ng-if="user.isAdmin">
