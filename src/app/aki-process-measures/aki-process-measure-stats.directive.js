@@ -55,7 +55,7 @@
               var x = value[0];
               var y = value[1];
 
-              var percent = y == 0 ? 0 : 100 * x / y;
+              var percent = y === 0 ? 0 : 100 * x / y;
               value.push(percent);
             });
 
