@@ -330,6 +330,21 @@ a.delete-user, a.delete-patient {
   text-decoration: underline;
 }
 
-.dead, .dead a {
+.dead, .dead a, .dead .hidden-demographics {
   color: red !important;
 }
+
+.patients {
+  tr.dead {
+    &, a, .hidden-demographics {
+      color: red !important;
+    }
+  }
+
+  tr.consent-required {
+    &, a, .hidden-demographics {
+      color: orange !important;
+    }
+  }
+}
+

@@ -12,7 +12,7 @@
           <p>No patients found.</p>
         </div>
 
-        <table class="table table-condensed table-striped" ng-if="items.length">
+        <table class="table table-condensed table-striped patients" ng-if="items.length">
           <thead>
             <tr ng-if="viewDemographicsPermission">
               <td colspan="8" toggle-demographics></td>
@@ -33,7 +33,7 @@
           </thead>
 
           <tbody>
-            <tr ng-repeat="patient in items" ng-class="{dead: patient.yearOfDeath}">
+            <tr ng-repeat="patient in items" ng-class="{'dead': patient.yearOfDeath, 'consent-required': patient.consentRequired}">
               <td>
                 <a ui-sref="patient.demographics({patientId: patient.id})">{{patient.id}}</a>
                 <i class="fa fa-link" ng-if="patient.ukrdc" title="Receiving data from UKRDC"></i>
@@ -69,7 +69,7 @@
 
                 <span ng-if="patient.dateOfBirth === undefined">{{patient.yearOfBirth | missing}}</span>
 
-                <span ng-if="patient.yearOfDeath" title="Dead"><i class="fa fa-exclamation-triangle"></i></span>
+                <span ng-if="patient.yearOfDeath" title="Patient is dead."><i class="fa fa-exclamation-triangle"></i></span>
               </td>
 
               <td>{{patient.gender.label | missing}}</td>
@@ -89,7 +89,15 @@
                 <span ng-if="patient.primaryPatientNumber === undefined" class="hidden-demographics">Hidden</span>
               </td>
 
-              <td>{{patient.recruitedDate | dateFormat}}</td>
+              <td>
+                {{patient.recruitedDate | dateFormat}}
+                
+                <span ng-if="patient.consentRequired">
+                  <span title="{{patient.consentMessage}}">
+                    <i class="fa fa-exclamation-triangle"></i>
+                  </span>
+                </span>
+              </td>
 
               <td ng-repeat="group in groups">{{patient.getFromDate(group) | dateFormat}}</td>
 
