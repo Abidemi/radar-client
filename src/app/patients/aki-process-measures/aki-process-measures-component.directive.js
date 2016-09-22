@@ -1,58 +1,62 @@
-(function() {
-  'use strict';
+import templateUrl from './aki-process-measures-component.html';
 
-  var app = angular.module('radar.patients.akiProcessMeasures');
+function akiProcessMeasuresPermissionFactory(PatientSourceObjectPermission) {
+  return PatientSourceObjectPermission;
+}
 
-  app.factory('AkiProcessMeasuresPermission', ['PatientSourceObjectPermission', function(PatientSourceObjectPermission) {
-    return PatientSourceObjectPermission;
-  }]);
+akiProcessMeasuresPermissionFactory.$inject = ['PatientSourceObjectPermission'];
 
-  function controllerFactory(
-    ModelListDetailController,
-    AkiProcessMeasuresPermission,
-    $injector,
-    store
-  ) {
-    function AkiProcessMeasuresController($scope) {
-      var self = this;
+function akiProcessMeasuresControllerFactory(
+  ModelListDetailController,
+  AkiProcessMeasuresPermission,
+  $injector,
+  store
+) {
+  function AkiProcessMeasuresController($scope) {
+    var self = this;
 
-      $injector.invoke(ModelListDetailController, self, {
-        $scope: $scope,
-        params: {
-          permission: new AkiProcessMeasuresPermission($scope.patient)
-        }
-      });
+    $injector.invoke(ModelListDetailController, self, {
+      $scope: $scope,
+      params: {
+        permission: new AkiProcessMeasuresPermission($scope.patient)
+      }
+    });
 
-      self.load(store.findMany('aki-process-measures', {patient: $scope.patient.id}));
+    self.load(store.findMany('aki-process-measures', {patient: $scope.patient.id}));
 
-      $scope.create = function() {
-        var item = store.create('aki-process-measures', {patient: $scope.patient.id});
-        self.edit(item);
-      };
-    }
-
-    AkiProcessMeasuresController.$inject = ['$scope'];
-    AkiProcessMeasuresController.prototype = Object.create(ModelListDetailController.prototype);
-
-    return AkiProcessMeasuresController;
+    $scope.create = function() {
+      var item = store.create('aki-process-measures', {patient: $scope.patient.id});
+      self.edit(item);
+    };
   }
 
-  controllerFactory.$inject = [
-    'ModelListDetailController',
-    'AkiProcessMeasuresPermission',
-    '$injector',
-    'store'
-  ];
+  AkiProcessMeasuresController.$inject = ['$scope'];
+  AkiProcessMeasuresController.prototype = Object.create(ModelListDetailController.prototype);
 
-  app.factory('AkiProcessMeasuresController', controllerFactory);
+  return AkiProcessMeasuresController;
+}
 
-  app.directive('akiProcessMeasuresComponent', ['AkiProcessMeasuresController', function(AkiProcessMeasuresController) {
-    return {
-      scope: {
-        patient: '='
-      },
-      controller: AkiProcessMeasuresController,
-      templateUrl: 'app/patients/aki-process-measures/aki-process-measures-component.html'
-    };
-  }]);
-})();
+akiProcessMeasuresControllerFactory.$inject = [
+  'ModelListDetailController',
+  'AkiProcessMeasuresPermission',
+  '$injector',
+  'store'
+];
+
+function akiProcessMeasuresComponent(AkiProcessMeasuresController) {
+  return {
+    scope: {
+      patient: '='
+    },
+    controller: AkiProcessMeasuresController,
+    templateUrl: templateUrl
+  };
+}
+
+akiProcessMeasuresComponent.$inject = ['AkiProcessMeasuresController'];
+
+export {
+  akiProcessMeasuresPermissionFactory,
+  akiProcessMeasuresControllerFactory,
+  akiProcessMeasuresComponent
+};

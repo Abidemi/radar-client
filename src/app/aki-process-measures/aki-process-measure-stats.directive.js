@@ -1,68 +1,64 @@
-(function() {
-  'use strict';
+import _ from 'lodash';
 
-  var app = angular.module('radar.akiProcessMeasures');
+import templateUrl from './aki-process-measure-stats.html';
 
-  function directive(
-    adapter, _, hospitalStore, sortHospitals
-  ) {
-    return {
-      restrict: 'A',
-      scope: {},
-      templateUrl: 'app/aki-process-measures/aki-process-measure-stats.html',
-      link: function(scope) {
-        var data = {
-          loading1: true,
-          loading2: false,
-          hospital: null,
-          hospitals: []
-        };
+function akiProcessMeasureStats(adapter, hospitalStore, sortHospitals) {
+  return {
+    restrict: 'A',
+    scope: true,
+    templateUrl: templateUrl,
+    link: function(scope) {
+      var data = {
+        loading1: true,
+        loading2: false,
+        hospital: null,
+        hospitals: []
+      };
 
-        scope.data = data;
+      scope.data = data;
 
-        hospitalStore.findMany().then(function(hospitals) {
-          hospitals = sortHospitals(hospitals);
-          data.hospitals = hospitals;
-          data.loading1 = false;
-        });
+      hospitalStore.findMany().then(function(hospitals) {
+        hospitals = sortHospitals(hospitals);
+        data.hospitals = hospitals;
+        data.loading1 = false;
+      });
 
-        scope.$watch('data.hospital', update);
+      scope.$watch('data.hospital', update);
 
-        function update(hospital) {
-          data.loading2 = true;
+      function update(hospital) {
+        data.loading2 = true;
 
-          var params = {};
-          var title;
+        var params = {};
+        var title;
 
-          if (hospital) {
-            params.group = hospital;
-            title = hospital.shortName;
-          } else {
-            title = 'All';
-          }
-
-          adapter.get('/aki-process-measure-stats', params).then(function(response) {
-            var stats = response.data;
-
-            // Calculate percentages
-            _.forEach(stats, function(value, key) {
-              var x = value[0];
-              var y = value[1];
-
-              var percent = y === 0 ? 0 : 100 * x / y;
-              value.push(percent);
-            });
-
-            data.title = title;
-            data.data = stats;
-            data.loading2 = false;
-          });
+        if (hospital) {
+          params.group = hospital;
+          title = hospital.shortName;
+        } else {
+          title = 'All';
         }
+
+        adapter.get('/aki-process-measure-stats', params).then(function(response) {
+          var stats = response.data;
+
+          // Calculate percentages
+          _.forEach(stats, function(value, key) {
+            var x = value[0];
+            var y = value[1];
+
+            var percent = y === 0 ? 0 : 100 * x / y;
+            value.push(percent);
+          });
+
+          data.title = title;
+          data.data = stats;
+          data.loading2 = false;
+        });
       }
-    };
-  }
+    }
+  };
+}
 
-  directive.$inject = ['adapter', '_', 'hospitalStore', 'sortHospitals'];
+akiProcessMeasureStats.$inject = ['adapter', 'hospitalStore', 'sortHospitals'];
 
-  app.directive('akiProcessMeasureStats', directive);
-})();
+export default akiProcessMeasureStats;

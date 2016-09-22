@@ -1,14 +1,12 @@
-(function() {
-  'use strict';
+import templateUrl from './aki-process-measure-table.html';
 
-  var app = angular.module('radar.akiProcessMeasures');
+function akiProcessMeasureTable() {
+  return {
+    scope: {
+      data: '='
+    },
+    templateUrl: templateUrl
+  };
+}
 
-  app.directive('akiProcessMeasureTable', function() {
-    return {
-      scope: {
-        data: '='
-      },
-      templateUrl: 'app/aki-process-measures/aki-process-measure-table.html'
-    };
-  });
-})();
+export default akiProcessMeasureTable;
