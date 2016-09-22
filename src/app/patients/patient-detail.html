@@ -1,7 +1,7 @@
 <div class="patient-header">
   <div class="patient">
     <ul>
-      <li class="name">
+      <li class="name" ng-class="{'dead': patient.yearOfDeath}">
         <a ui-sref="patient.demographics({patientId: patient.id})">
           <span if-demographics-visible ng-bind="patient.getName(true)"></span>
           <span if-demographics-hidden ng-bind="patient.getName(false)"></span>
@@ -11,7 +11,10 @@
       <li class="info">
         <span>
           <span class="key">ID</span>
-          <span class="value">{{patient.id}}</span>
+          <span class="value">
+            {{patient.id}}
+            <i class="fa fa-link" ng-if="patient.ukrdc" title="Receiving data from UKRDC"></i>
+          </span>
         </span>
       </li>
 
@@ -25,6 +28,20 @@
 
           <span if-demographics-hidden>
             <span class="value">{{patient.yearOfBirth | missing}}</span>
+          </span>
+        </span>
+      </li>
+
+      <li class="info dod" ng-if="patient.dateOfDeath || patient.yearOfDeath">
+        <span>
+          <span class="key">DOD</span>
+          <span if-demographics-visible>
+            <span class="value" ng-if="patient.dateOfDeath">{{patient.dateOfDeath | dateFormat}}</span>
+            <span class="value" ng-if="!patient.yearOfDeath">{{patient.yearOfDeath}}</span>
+          </span>
+
+          <span if-demographics-hidden>
+            <span class="value">{{patient.yearOfDeath}}</span>
           </span>
         </span>
       </li>
@@ -86,5 +103,8 @@
 </div>
 
 <div page-wrapper>
+  <div ng-if="patient.test" class="alert alert-info"><strong><i class="fa fa-info-circle"></i> Info</strong> This is a test patient.</div>
+  <div ng-if="patient.frozen" class="alert alert-warning"><strong><i class="fa fa-exclamation-circle"></i> Warning</strong> This patient is frozen.</div>
+
   <div ui-view></div>
 </div>

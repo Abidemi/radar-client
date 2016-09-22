@@ -323,7 +323,7 @@ a.delete-user, a.delete-patient {
 }
 
 .no-link, .no-link:hover {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .link {
@@ -333,4 +333,8 @@ a.delete-user, a.delete-patient {
 tr.total  {
   font-weight: bold;
   color: blue;
+}
+
+.dead, .dead a {
+  color: red !important;
 }

@@ -1,24 +1,30 @@
-(function() {
-  'use strict';
+function createUserPermission(
+  hasPermission,
+  session,
+  ngIfDirective
+) {
+  // Source: http://stackoverflow.com/a/24065378
+  var ngIf = ngIfDirective[0];
 
-  var app = angular.module('radar.users');
+  return {
+    transclude: ngIf.transclude,
+    priority: ngIf.priority,
+    terminal: ngIf.terminal,
+    restrict: ngIf.restrict,
+    link: function(scope, element, attrs) {
+      attrs.ngIf = function() {
+        return hasPermission(session.user, 'EDIT_USER_MEMBERSHIP');
+      };
 
-  app.directive('createUserPermission', ['hasPermission', '$compile', 'session', function(hasPermission, $compile, session) {
-    // TODO $compile memory leak
-    return {
-      scope: true,
-      link: function(scope, element, attrs) {
-        scope.$watch(function() {
-          return hasPermission(session.user, 'EDIT_USER_MEMBERSHIP');
-        }, function(hasPermission) {
-          scope.hasPermission = hasPermission;
-        });
+      ngIf.link.apply(ngIf, arguments);
+    }
+  };
+}
 
-        // TODO this will overwrite an existing ng-if attribute
-        element.attr('ng-if', 'hasPermission');
-        element.removeAttr('create-user-permission');
-        $compile(element)(scope);
-      }
-    };
-  }]);
-})();
+createUserPermission.$inject = [
+  'hasPermission',
+  'session',
+  'ngIfDirective'
+];
+
+export default createUserPermission;

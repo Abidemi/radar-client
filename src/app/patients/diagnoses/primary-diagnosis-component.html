@@ -7,7 +7,7 @@
 
     <table class="table properties">
       <tr>
-        <th>Source</th>
+        <th>Data Source</th>
         <td>{{item.getSource()}}</td>
       </tr>
 
@@ -29,6 +29,11 @@
       <tr>
         <th>To Date</th>
         <td>{{item.toDate | dateFormat}} <span ng-if="item.toDate">({{item.toAge | ageFormat}})</span></td>
+      </tr>
+
+      <tr>
+        <th>Prenatal Diagnosis</th>
+        <td><span tick="item.prenatal"></span></td>
       </tr>
 
       <tr>
@@ -108,6 +113,15 @@
         <div frm-control>
           <div frm-date-field model="item.toDate"></div>
           <div frm-errors errors="item.errors.toDate"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Prenatal Diagnosis</div>
+
+        <div frm-control>
+          <div frm-boolean-field model="item.prenatal"></div>
+          <div frm-errors errors="item.errors.prenatal"></div>
         </div>
       </div>
 
@@ -192,7 +206,7 @@
           <th sort-helper="symptomsDate">Symptoms Date</th>
           <th sort-helper="fromDate">From Date</th>
           <th sort-helper="toDate">To Date</th>
-          <th sort-helper="getSource()">Source</th>
+          <th sort-helper="getSource()">Data Source</th>
           <th></th>
         </tr>
       </thead>

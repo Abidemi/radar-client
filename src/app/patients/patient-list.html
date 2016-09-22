@@ -25,15 +25,19 @@
               <th sort-helper="dateOfBirth">DOB</th>
               <th sort-helper="gender">Gender</th>
               <th sort-helper="primaryPatientNumber" ng-if="viewDemographicsPermission">Patient Number</th>
-              <th sort-helper="recruitedDate">Date Recruited</th>
+              <th sort-helper="recruitedDate">Recruited On</th>
+              <th ng-repeat="group in groups" sort-helper="group_{{group.id}}">{{group.shortName}}</th>
               <th>Cohorts</th>
               <th>Hospitals</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr ng-repeat="patient in items">
-              <td><a ui-sref="patient.demographics({patientId: patient.id})">{{patient.id}}</a></td>
+            <tr ng-repeat="patient in items" ng-class="{dead: patient.yearOfDeath}">
+              <td>
+                <a ui-sref="patient.demographics({patientId: patient.id})">{{patient.id}}</a>
+                <i class="fa fa-link" ng-if="patient.ukrdc" title="Receiving data from UKRDC"></i>
+              </td>
 
               <td>
                 <a ui-sref="patient.demographics({patientId: patient.id})">
@@ -64,6 +68,8 @@
                 </span>
 
                 <span ng-if="patient.dateOfBirth === undefined">{{patient.yearOfBirth | missing}}</span>
+
+                <span ng-if="patient.yearOfDeath" title="Dead"><i class="fa fa-exclamation-triangle"></i></span>
               </td>
 
               <td>{{patient.gender.label | missing}}</td>
@@ -84,6 +90,8 @@
               </td>
 
               <td>{{patient.recruitedDate | dateFormat}}</td>
+
+              <td ng-repeat="group in groups">{{patient.getFromDate(group) | dateFormat}}</td>
 
               <td>
                 <span ng-if="!patient.getCurrentCohorts().length">-</span>
@@ -110,6 +118,8 @@
 
     <div class="col-sm-4">
       <h3>Search</h3>
+
+      <p>Search patients belonging to your cohorts and hospitals.</p>
 
       <form class="form-horizontal form-container" submit-if-valid="search()" novalidate>
         <div frm-buttons>
@@ -221,6 +231,15 @@
 
           <div frm-control>
             <div frm-boolean-field model="filters.current"></div>
+            <div frm-errors></div>
+          </div>
+        </div>
+
+        <div frm-field frm-group>
+          <div frm-label>UKRDC</div>
+
+          <div frm-control>
+            <div frm-boolean-field model="filters.ukrdc"></div>
             <div frm-errors></div>
           </div>
         </div>
