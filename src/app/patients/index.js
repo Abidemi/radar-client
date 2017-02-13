@@ -4,6 +4,7 @@ import addresses from './addresses';
 import aliases from './aliases';
 import alport from './alport';
 import cohorts from './cohorts';
+import consents from './consents';
 import consultants from './consultants';
 import demographics from './demographics';
 import diagnoses from './diagnoses';
@@ -93,6 +94,7 @@ export default angular.module('radar.patients', [
   aliases,
   alport,
   cohorts,
+  consents,
   consultants,
   demographics,
   diagnoses,
