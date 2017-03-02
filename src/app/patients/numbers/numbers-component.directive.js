@@ -1,10 +1,10 @@
 import templateUrl from './numbers-component.html';
 
-function patientNumberPermissionFactory(PatientRadarObjectPermission) {
-  return PatientRadarObjectPermission;
+function patientNumberPermissionFactory(PatientSystemObjectPermission) {
+  return PatientSystemObjectPermission;
 }
 
-patientNumberPermissionFactory.$inject = ['PatientRadarObjectPermission'];
+patientNumberPermissionFactory.$inject = ['PatientSystemObjectPermission'];
 
 function patientNumbersControllerFactory(
   ModelListDetailController,
@@ -14,6 +14,12 @@ function patientNumbersControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A component for recording patient numbers (e.g. NHS numbers, local hosptial numbers, and study numbers).
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientNumbersController($scope) {
     var self = this;
 
@@ -45,6 +51,11 @@ function patientNumbersControllerFactory(
   PatientNumbersController.$inject = ['$scope'];
   PatientNumbersController.prototype = Object.create(ModelListDetailController.prototype);
 
+  /**
+   * A number was updated.
+   *
+   * @returns {Object} - a promise.
+   */
   PatientNumbersController.prototype.save = function() {
     var self = this;
 
@@ -54,6 +65,12 @@ function patientNumbersControllerFactory(
     });
   };
 
+  /**
+   * A number was removed.
+   *
+   * @param {Object} item - the item to remove.
+   * @returns {Object} - a promise.
+   */
   PatientNumbersController.prototype.remove = function(item) {
     var self = this;
 

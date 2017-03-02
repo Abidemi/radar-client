@@ -22,7 +22,7 @@
       </tr>
 
       <tr>
-        <th>From Date</th>
+        <th>Diagnosis Date</th>
         <td>{{item.fromDate | dateFormat}} ({{item.fromAge | ageFormat}})</td>
       </tr>
 
@@ -81,8 +81,11 @@
         <div frm-label>Diagnosis</div>
 
         <div frm-control>
-          <div frm-select-field model="item.diagnosis" required="true" options="diagnoses" options-label="name"></div>
-          <div frm-help>Choose the most specific diagnosis.</div>
+          <div frm-primary-diagnosis-field cohort="cohort" model="item.diagnosis" required="true"></div>
+          <div frm-help>
+            Choose the most specific diagnosis.<br />
+            <a href="https://www.era-edta-reg.org/prd.jsp" target="_blank">ERA-EDTA PRD codes.</a>
+          </div>
           <div frm-errors errors="item.errors.diagnosis"></div>
         </div>
       </div>
@@ -98,11 +101,11 @@
       </div>
 
       <div frm-field frm-group>
-        <div frm-label>From Date</div>
+        <div frm-label>Diagnosis Date</div>
 
         <div frm-control>
           <div frm-date-field model="item.fromDate" required="true"></div>
-          <div frm-help>Date of diagnosis.</div>
+          <div frm-help>01/MM/YYYY if day is not known, 01/01/YYYY if only a year known.</div>
           <div frm-errors errors="item.errors.fromDate"></div>
         </div>
       </div>
@@ -204,7 +207,7 @@
           <th></th>
           <th sort-helper="getDiagnosis()">Diagnosis</th>
           <th sort-helper="symptomsDate">Symptoms Date</th>
-          <th sort-helper="fromDate">From Date</th>
+          <th sort-helper="fromDate">Diagnosis Date</th>
           <th sort-helper="toDate">To Date</th>
           <th sort-helper="getSource()">Data Source</th>
           <th></th>

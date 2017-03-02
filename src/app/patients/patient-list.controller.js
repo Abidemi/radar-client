@@ -1,5 +1,21 @@
 import angular from 'angular';
 import _ from 'lodash';
+import $ from 'jquery';
+
+/**
+ * Generate a URL to download the list of patients as CSV.
+ *
+ * @param {Object} params - URL parameters.
+ * @returns {string} - URL to download the patient list.
+ */
+function getDownloadUrl(params) {
+  // Download all patients rather than just the current page
+  params = angular.copy(params);
+  delete params.page;
+  delete params.perPage;
+
+  return '/api/patients.csv?' + $.param(params);
+}
 
 function patientListControllerFactory(
   ListController,
@@ -11,9 +27,16 @@ function patientListControllerFactory(
   session
 ) {
   var DEFAULT_FILTERS = {
-    current: true
+    current: true,
+    test: false
   };
 
+  /**
+   * Controller for a list of patients.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientListController($scope) {
     var self = this;
 
@@ -21,6 +44,7 @@ function patientListControllerFactory(
 
     $injector.invoke(ListController, self, {$scope: $scope});
 
+    // Initialise the filter to the defaults
     $scope.filters = angular.copy(DEFAULT_FILTERS);
 
     var proxy = new ListHelperProxy(update, {
@@ -39,12 +63,24 @@ function patientListControllerFactory(
       $scope.genders = genders;
     });
 
+    /**
+     * Get the groups to filter by.
+     *
+     * @param {Object} filters - patient list filters.
+     * @returns {array} - list of groups to filter by.
+     */
     function getGroups(filters) {
-      return _.filter([filters.cohort, filters.hospital], function(group) {
-        return group !== undefined && group !== null;
+      return _.filter([filters.system, filters.cohort, filters.hospital], function(group) {
+        return group != null;
       });
     }
 
+    /**
+     * Convert the list of filters to URL parameters.
+     *
+     * @param {Object} filters - patient list filters.
+     * @returns {Object} - equivalent URL parameters.
+     */
     function filtersToParams(filters) {
       var params = {};
 
@@ -54,14 +90,18 @@ function patientListControllerFactory(
         'dateOfBirth', 'yearOfBirth',
         'dateOfDeath', 'yearOfDeath',
         'gender', 'patientNumber',
-        'current', 'ukrdc'
+        'current', 'ukrdc', 'test'
       ];
 
       _.forEach(keys, function(key) {
         var value = filters[key];
 
         if (value !== undefined && value !== null && value !== '') {
-          params[key] = value;
+          if (key === 'gender') {
+            params[key] = value.id;
+          } else {
+            params[key] = value;
+          }
         }
       });
 
@@ -78,10 +118,15 @@ function patientListControllerFactory(
       return params;
     }
 
+    /**
+     * Update the list of patients.
+     *
+     * @returns {Object} - a promise that resolves to a list of patients.
+     */
     function update() {
       $scope.groups = getGroups($scope.filters);
 
-      // Sorted by group
+      // List is currently sorted by group
       if (proxy.getSortBy().indexOf('group') === 0) {
         // Check if we are still filtering against the sorted group
         var found = _.some($scope.groups, function(group) {
@@ -97,6 +142,8 @@ function patientListControllerFactory(
       var proxyParams = proxy.getParams();
       var params = angular.extend({}, proxyParams, filtersToParams($scope.filters));
 
+      $scope.downloadUrl = getDownloadUrl(params);
+
       return self.load(firstPromise([
         store.findMany('patients', params, true).then(function(data) {
           proxy.setItems(data.data);
@@ -108,14 +155,26 @@ function patientListControllerFactory(
       ]));
     }
 
+    /**
+     * Search patients that match the filters.
+     *
+     * @returns {Object} - a promise that resolves to a list of patients.
+     */
     function search() {
+      // Jump back to the first page when updating the search
       proxy.page = 1;
       return update();
     }
 
+    /**
+     * Reset the filters and trigger a search.
+     *
+     * @returns {Object} - a promise that resolves to a list of patients.
+     */
     function clear() {
+      // Reset the filters back to the default
       $scope.filters = angular.copy(DEFAULT_FILTERS);
-      search();
+      return search();
     }
   }
 

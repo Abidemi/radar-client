@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import templateUrl from './primary-diagnosis-component.html';
 
 function primaryPatientDiagnosisControllerFactory(
@@ -20,13 +18,12 @@ function primaryPatientDiagnosisControllerFactory(
       }
     });
 
+    // True if this cohort can have multiple primary diagnoses
     $scope.multiple = false;
 
     self.load(firstPromise([
+      // List of primary diagnoses for this cohort
       store.findMany('patient-diagnoses', {patient: $scope.patient.id, primaryGroup: $scope.cohort.id}),
-      store.findMany('diagnoses', {primaryGroup: $scope.cohort.id}).then(function(diagnoses) {
-        $scope.diagnoses = _.sortBy(diagnoses, 'name');
-      }),
       store.findMany('biopsy-diagnoses').then(function(biopsyDiagnoses) {
         $scope.biopsyDiagnoses = biopsyDiagnoses;
       }),
@@ -37,13 +34,15 @@ function primaryPatientDiagnosisControllerFactory(
       // TODO this won't handle a UKRDC primary diagnoses being entered before a RaDaR one
       var multiple = $scope.items.length > 1 || $scope.cohort.multipleDiagnoses;
 
-      if ($scope.items.length === 0) {
+      if ($scope.items.length === 0) { // No primary diagnoses entered
+        // Create a new diagnosis if the user has permission, otherwise show
+        // the empty list.
         if (self.createPermission()) {
           create();
         } else {
           self.list();
         }
-      } else if (multiple) {
+      } else if (multiple) { // Multiple primary diagnoses allowed
         self.list();
       } else {
         self.view($scope.items[0]);
@@ -55,10 +54,12 @@ function primaryPatientDiagnosisControllerFactory(
     $scope.create = create;
 
     function create() {
+      // Default the source group to RADAR
       var item = store.create('patient-diagnoses', {
         patient: $scope.patient.id,
         sourceGroup: $scope.sourceGroup,
       });
+
       self.edit(item);
     }
   }

@@ -1,0 +1,23 @@
+<div loading="loading">
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Hospital</th>
+        <th>Patients</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr ng-if="counts.length === 0">
+        <td colspan="3">No patients.</td>
+      </tr>
+
+      <tr ng-repeat="count in counts">
+        <td>{{$index + 1}}</td>
+        <td>{{count.group.shortName}}</td>
+        <td>{{count.count}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,18 @@
+<div
+  class="form-group"
+  ng-class="{'required': field.required(), 'has-error': !valid()}"
+  ng-show="field.visible()">
+  <label class="control-label col-md-3">{{field.label}}</label>
+  <div class="col-md-9">
+      <div marmoset-widget="field"></div>
+
+      <div class="help-block" ng-show="field.help" ng-bind-html="field.help | unsafe"></div>
+
+      <div class="help-block" ng-show="error('required')">This field is required.</div>
+      <div class="help-block" ng-show="error('date')">Invalid date.</div>
+      <div class="help-block" ng-show="error('integer')">Not a number.</div>
+      <div class="help-block" ng-show="error('number')">Not a number.</div>
+
+      <div class="help-block" ng-repeat="error in field.errors[field.name]">{{error}}</div>
+  </div>
+</div>

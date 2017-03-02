@@ -12,6 +12,12 @@ function hospitalisationsControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A component for recording a patient's hospitalisations (hospital visits).
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function HospitalisationsController($scope) {
     var self = this;
 

@@ -1,10 +1,10 @@
 import templateUrl from './addresses-component.html';
 
-function patientAddressPermissionFactory(PatientRadarObjectPermission) {
-  return PatientRadarObjectPermission;
+function patientAddressPermissionFactory(PatientSystemObjectPermission) {
+  return PatientSystemObjectPermission;
 }
 
-patientAddressPermissionFactory.$inject = ['PatientRadarObjectPermission'];
+patientAddressPermissionFactory.$inject = ['PatientSystemObjectPermission'];
 
 function patientAddressesControllerFactory(
   ModelListDetailController,
@@ -14,6 +14,13 @@ function patientAddressesControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * Each patient can have multiple addresses. Each record has a from and to date
+   * which are the dates the patient moved in and moved out respectively.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientAddressesController($scope) {
     var self = this;
 
@@ -28,16 +35,22 @@ function patientAddressesControllerFactory(
 
     self.load(firstPromise([
       store.findMany('patient-addresses', {patient: $scope.patient.id}),
+      store.findMany('countries').then(function(countries) {
+        $scope.countries = countries;
+      }),
       getRadarGroup().then(function(group) {
         $scope.sourceGroup = group;
       })
     ]));
 
     $scope.create = function() {
+      // Set the default country to Great Britain
       var item = store.create('patient-addresses', {
         patient: $scope.patient.id,
+        country: {id: 'GB'},
         sourceGroup: $scope.sourceGroup
       });
+
       self.edit(item);
     };
   }

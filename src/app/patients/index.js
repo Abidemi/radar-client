@@ -11,6 +11,7 @@ import dialysis from './dialysis';
 import familyHistory from './family-history';
 import fetalAnomalyScans from './fetal-anomaly-scans';
 import fetalUltrasounds from './fetal-ultrasounds';
+import forms from './forms';
 import fuan from './fuan';
 import genetics from './genetics';
 import hnf1b from './hnf1b';
@@ -39,7 +40,6 @@ import ifDemographicsVisible from './if-demographics-visible.directive';
 import PatientDetailController from './patient-detail.controller';
 import patientListControllerFactory from './patient-list.controller';
 import patientModelFactory from './patient-model';
-import patientPages from './patient-pages';
 import toggleDemographicsService from './toggle-demographics-service';
 import toggleDemographics from './toggle-demographics.directive';
 
@@ -100,6 +100,7 @@ export default angular.module('radar.patients', [
   familyHistory,
   fetalAnomalyScans,
   fetalUltrasounds,
+  forms,
   fuan,
   genetics,
   hnf1b,
@@ -129,7 +130,6 @@ export default angular.module('radar.patients', [
   .controller('PatientDetailController', PatientDetailController)
   .factory('PatientListController', patientListControllerFactory)
   .factory('PatientModel', patientModelFactory)
-  .factory('patientPages', patientPages)
   .factory('toggleDemographicsService', toggleDemographicsService)
   .directive('toggleDemographics', toggleDemographics)
   .name;

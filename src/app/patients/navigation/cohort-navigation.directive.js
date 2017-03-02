@@ -1,30 +1,18 @@
-import _ from 'lodash';
+import getLinks from '../get-links';
 
 import templateUrl from './cohort-navigation.html';
 
-function cohortNavigation(patientPages) {
+function cohortNavigation() {
   return {
     scope: {
-      patient: '=',
-      cohort: '='
+      cohort: '=',
+      patient: '='
     },
     templateUrl: templateUrl,
     link: function(scope) {
-      scope.items = [];
-
-      var pages = scope.cohort.pages;
-
-      _.forEach(pages, function(x) {
-        var item = patientPages[x];
-
-        if (item !== undefined) {
-          scope.items.push(item);
-        }
-      });
+      scope.items = getLinks(scope.cohort, scope.patient);
     }
   };
 }
-
-cohortNavigation.$inject = ['patientPages'];
 
 export default cohortNavigation;

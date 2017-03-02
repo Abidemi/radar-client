@@ -16,6 +16,7 @@ import groups from './groups';
 import home from './home';
 import hospitals from './hospitals';
 import logs from './logs';
+import marmoset from './marmoset';
 import notifications from './notifications';
 import observations from './observations';
 import patients from './patients';
@@ -25,10 +26,13 @@ import recruitPatient from './recruit-patient';
 import sessions from './sessions';
 import sources from './sources';
 import store from './store';
+import systems from './systems';
 import ui from './ui';
 import users from './users';
 import utils from './utils';
 import validators from './validators';
+
+import getValueAtPath from './utils/get-value-at-path';
 
 function config($urlRouterProvider, adapterProvider) {
   adapterProvider.setBaseUrl('/api');
@@ -40,7 +44,6 @@ config.$inject = ['$urlRouterProvider', 'adapterProvider'];
 function run(
   $rootScope,
   radar,
-  getValueAtPath,
   session,
   $state,
   notificationService,
@@ -92,7 +95,6 @@ function run(
 run.$inject = [
   '$rootScope',
   'radar',
-  'getValueAtPath',
   'session',
   '$state',
   'notificationService',
@@ -116,6 +118,7 @@ export default angular.module('radar', [
   home,
   hospitals,
   logs,
+  marmoset,
   notifications,
   observations,
   patients,
@@ -125,6 +128,7 @@ export default angular.module('radar', [
   sessions,
   sources,
   store,
+  systems,
   ui,
   users,
   utils,

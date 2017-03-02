@@ -330,8 +330,23 @@ a.delete-user, a.delete-patient {
   text-decoration: underline;
 }
 
-.dead, .dead a, .dead .hidden-demographics {
-  color: red !important;
+/*.dead, .dead a, .dead .hidden-demographics {
+  color: red !important;*/
+.dead, .dead a, .dead a .hidden-demographics {
+  color: red;
+}
+
+/* More spacing between inline elements */
+.radio-inline + .radio-inline, .checkbox-inline + .checkbox-inline {
+  margin-left: 30px;
+}
+
+.negative {
+  text-decoration: line-through;
+}
+
+.leaderboard h2 {
+  margin-top: 0;
 }
 
 .patients {

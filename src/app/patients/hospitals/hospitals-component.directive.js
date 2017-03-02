@@ -7,10 +7,12 @@ function patientHospitalPermissionFactory(hasPermission, hasPermissionForGroup, 
   }
 
   PatientHospitalPermission.prototype.hasPermission = function() {
+    // User must have the EDIT_PATIENT_MEMBERSHIP on any group
     return hasPermission(session.user, 'EDIT_PATIENT_MEMBERSHIP');
   };
 
   PatientHospitalPermission.prototype.hasObjectPermission = function(obj) {
+    // User must have the EDIT_PATIENT_MEMBERSHIP permission on the group and created group
     return (
         hasPermissionForGroup(session.user, obj.group, 'EDIT_PATIENT_MEMBERSHIP') &&
         hasPermissionForGroup(session.user, obj.createdGroup, 'EDIT_PATIENT_MEMBERSHIP')
@@ -28,6 +30,14 @@ function patientHospitalsControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A patient may attend several hospitals over their life. A patient may go to another hospital
+   * for specialist treatment or more permanently if they move house. The from and to date of each
+   * membership represented the period where a patient was being treated at that hospital.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientHospitalsController($scope) {
     var self = this;
 
@@ -48,25 +58,42 @@ function patientHospitalsControllerFactory(
   PatientHospitalsController.$inject = ['$scope'];
   PatientHospitalsController.prototype = Object.create(ModelListDetailController.prototype);
 
+  /**
+   * Called when a membership is updated.
+   *
+   * @returns {Object} - a promise that resolves to the saved membership.
+   */
   PatientHospitalsController.prototype.save = function() {
     var self = this;
 
     return ModelListDetailController.prototype.save.call(self).then(function(groupPatient) {
-      // Add the group to the patient's groups
+      // If this is a new membership add it to the patient's membership list
       if (!_.includes(self.scope.patient.groups, groupPatient)) {
         self.scope.patient.groups.push(groupPatient);
       }
+
+      // Reload the patient in case they were added to any other groups
+      self.scope.patient.reload();
 
       return groupPatient;
     });
   };
 
+  /**
+   * Called when a membership is deleted.
+   *
+   * @param {Object} groupPatient - membership to delete.
+   * @returns {Object} - a promise.
+   */
   PatientHospitalsController.prototype.remove = function(groupPatient) {
     var self = this;
 
     return ModelListDetailController.prototype.remove.call(self, groupPatient).then(function() {
-      // Remove the group from the patient's groups
+      // Remove this membership from the patient's membership list
       _.pull(self.scope.patient.groups, groupPatient);
+
+      // Reload the patient in case they were removed from any other groups
+      self.scope.patient.reload();
     });
   };
 

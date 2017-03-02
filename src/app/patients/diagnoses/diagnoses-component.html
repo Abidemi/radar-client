@@ -13,11 +13,11 @@
 
       <tr>
         <th>Diagnosis</th>
-        <td>{{item.getDiagnosis()}}</td>
+        <td ng-class="{negative: !item.status}">{{item.getDiagnosis()}}</td>
       </tr>
 
       <tr>
-        <th>From Date</th>
+        <th>Diagnosis Date</th>
         <td>{{item.fromDate | dateFormat}} ({{item.fromAge | ageFormat}})</td>
       </tr>
 
@@ -56,6 +56,7 @@
 
         <div frm-control>
           <div frm-diagnosis-field patient="patient" model="item.diagnosis" required="!item.diagnosisText"></div>
+          <div frm-help><a href="https://www.era-edta-reg.org/prd.jsp" target="_blank">ERA-EDTA PRD codes.</a></div>
           <div frm-errors errors="item.errors.diagnosis"></div>
         </div>
       </div>
@@ -71,7 +72,16 @@
       </div>
 
       <div frm-field frm-group>
-        <div frm-label>From Date</div>
+        <div frm-label>Status</div>
+
+        <div frm-control>
+          <div frm-diagnosis-status-field model="item.status" required="true"></div>
+          <div frm-errors errors="item.errors.status"></div>
+        </div>
+      </div>
+
+      <div frm-field frm-group>
+        <div frm-label>Diagnosis Date</div>
 
         <div frm-control>
           <div frm-date-field model="item.fromDate" required="true"></div>
@@ -121,7 +131,7 @@
         <tr>
           <th></th>
           <th sort-helper="getDiagnosis()">Diagnosis</th>
-          <th sort-helper="fromDate">From Date</th>
+          <th sort-helper="fromDate">Diagnosis Date</th>
           <th sort-helper="toDate">To Date</th>
           <th sort-helper="getSource()">Data Source</th>
           <th></th>
@@ -135,7 +145,7 @@
             <span crud-list-edit-button item="item"></span>
           </td>
 
-          <td>{{item.getDiagnosis()}}</td>
+          <td ng-class="{negative: !item.status}">{{item.getDiagnosis()}}</td>
           <td>{{item.fromDate | dateFormat}} ({{item.fromAge | ageFormat}})</td>
           <td>{{item.toDate | dateFormat}}</td>
           <td class="source">{{item.getSource()}}</td>

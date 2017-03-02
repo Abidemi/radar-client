@@ -11,6 +11,12 @@ function patientMetadataControllerFactory(
   PatientMetadataPermission,
   $injector
 ) {
+  /**
+   * A component for recording metadata about the patient (for example comments).
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientMetadataController($scope) {
     var self = this;
 

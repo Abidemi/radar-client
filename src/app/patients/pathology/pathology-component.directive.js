@@ -13,6 +13,12 @@ function pathologyControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A component for recording a patient's pathology results.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PathologyController($scope) {
     var self = this;
 

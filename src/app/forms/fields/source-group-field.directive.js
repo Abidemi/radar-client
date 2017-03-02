@@ -1,8 +1,10 @@
 import _ from 'lodash';
 
+import sortGroups from '../../groups/sort-groups';
+
 import templateUrl from './source-group-field.html';
 
-function frmSourceGroupField(store, session, sortGroups) {
+function frmSourceGroupField(store, session) {
   return {
     restrict: 'A',
     scope: {
@@ -32,7 +34,7 @@ function frmSourceGroupField(store, session, sortGroups) {
 
       _.forEach(patientGroups, function(patientGroup) {
         if (
-          (patientGroup.group.code === 'RADAR' && patientGroup.group.type === 'OTHER') ||
+          (patientGroup.group.type === 'SYSTEM') ||
           (patientGroup.group.type === 'HOSPITAL' && (isAdmin || groupIds.indexOf(patientGroup.group.id) >= 0))
         ) {
           sourceGroups.push(patientGroup.group);
@@ -50,6 +52,6 @@ function frmSourceGroupField(store, session, sortGroups) {
   };
 }
 
-frmSourceGroupField.$inject = ['store', 'session', 'sortGroups'];
+frmSourceGroupField.$inject = ['store', 'session'];
 
 export default frmSourceGroupField;

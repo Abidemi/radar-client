@@ -13,6 +13,12 @@ function nephrectomiesControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A component for recording a patient's nephrectomies.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function NephrectomiesController($scope) {
     var self = this;
 

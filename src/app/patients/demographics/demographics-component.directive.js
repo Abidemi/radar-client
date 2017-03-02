@@ -1,10 +1,10 @@
 import templateUrl from './demographics-component.html';
 
-function patientDemographicsPermissionFactory(PatientRadarObjectPermission) {
-  return PatientRadarObjectPermission;
+function patientDemographicsPermissionFactory(PatientSystemObjectPermission) {
+  return PatientSystemObjectPermission;
 }
 
-patientDemographicsPermissionFactory.$inject = ['PatientRadarObjectPermission'];
+patientDemographicsPermissionFactory.$inject = ['PatientSystemObjectPermission'];
 
 function patientDemographicsControllerFactory(
   ModelListDetailController,
@@ -14,8 +14,21 @@ function patientDemographicsControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * Each patient has a demographics record which includes PID like their name, date of birth
+   * and ethnicity. A patient can have at most one demographics record per source (e.g. RADAR
+   * and UKRDC).
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientDemographicsController($scope) {
     var self = this;
+
+    // When a patient is recruited an entry is created in the demographics table with the
+    // patient's name etc. This entry can be edited but not deleted. There should only be
+    // one entry per patient (and source). Therefore users shouldn't be allowed to create new
+    // entries.
 
     $injector.invoke(ModelListDetailController, self, {
       $scope: $scope,
@@ -40,6 +53,11 @@ function patientDemographicsControllerFactory(
   PatientDemographicsController.$inject = ['$scope'];
   PatientDemographicsController.prototype = Object.create(ModelListDetailController.prototype);
 
+  /**
+   * Called when the demographics are saved.
+   *
+   * @returns {Object} - a promise.
+   */
   PatientDemographicsController.prototype.save = function() {
     var self = this;
 

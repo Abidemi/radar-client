@@ -1,10 +1,10 @@
 import templateUrl from './aliases-component.html';
 
-function patientAliasPermissionFactory(PatientRadarObjectPermission) {
-  return PatientRadarObjectPermission;
+function patientAliasPermissionFactory(PatientSystemObjectPermission) {
+  return PatientSystemObjectPermission;
 }
 
-patientAliasPermissionFactory.$inject = ['PatientRadarObjectPermission'];
+patientAliasPermissionFactory.$inject = ['PatientSystemObjectPermission'];
 
 function patientAliasesControllerFactory(
   ModelListDetailController,
@@ -14,6 +14,14 @@ function patientAliasesControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * Each patient can have multiple aliases. An alias is another name the patient
+   * is known by. This is useful for recording maiden names, name changes, or mispellings.
+   * Aliases are searchable in the patient list.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PatientAliasesController($scope) {
     var self = this;
 
@@ -36,6 +44,7 @@ function patientAliasesControllerFactory(
         patient: $scope.patient.id,
         sourceGroup: $scope.sourceGroup
       });
+
       self.edit(item);
     };
   }

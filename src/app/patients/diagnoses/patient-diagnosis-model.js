@@ -1,25 +1,36 @@
-function patientDiagnosisModelFactory(Model) {
+function patientDiagnosisModelFactory(Model, store) {
   function PatientDiagnosisModel(modelName, data) {
+    if (data.diagnosis) {
+      // Create a diagnosis model
+      data.diagnosis = store.pushToStore(store.create('diagnoses', data.diagnosis));
+    }
+
     Model.call(this, modelName, data);
   }
 
   PatientDiagnosisModel.prototype = Object.create(Model.prototype);
 
+  /**
+   * Returns the diagnosis name (coded diagnosis takes precedence).
+   *
+   * @returns {string} - the diagnosis name.
+   */
   PatientDiagnosisModel.prototype.getDiagnosis = function() {
-    var r;
+    var name;
 
+    // Check for a coded diagnosis
     if (this.diagnosis) {
-      r = this.diagnosis.name;
+      name = this.diagnosis.name;
     } else {
-      r = this.diagnosisText;
+      name = this.diagnosisText;
     }
 
-    return r;
+    return name;
   };
 
   return PatientDiagnosisModel;
 }
 
-patientDiagnosisModelFactory.$inject = ['Model'];
+patientDiagnosisModelFactory.$inject = ['Model', 'store'];
 
 export default patientDiagnosisModelFactory;

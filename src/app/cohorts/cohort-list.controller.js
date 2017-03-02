@@ -1,10 +1,20 @@
-function CohortListController($scope, session, cohortStore, sortCohorts) {
+import sortGroups from '../groups/sort-groups';
+
+/**
+ * Controller for a list of cohorts.
+ *
+ * @class
+ * @param {Object} $scope - angular scope.
+ * @param {Object} session - injected session.
+ * @param {Object} cohortStore - injected store.
+ */
+function CohortListController($scope, session, cohortStore) {
   $scope.loading = true;
 
   init();
 
   function setCohorts(cohorts) {
-    $scope.cohorts = sortCohorts(cohorts);
+    $scope.cohorts = sortGroups(cohorts);
     $scope.loading = false;
   }
 
@@ -17,12 +27,13 @@ function CohortListController($scope, session, cohortStore, sortCohorts) {
         setCohorts(cohorts);
       });
     } else {
+      // Otherwise display the cohorts the user is a member of
       var cohorts = user.getCohorts();
       setCohorts(cohorts);
     }
   }
 }
 
-CohortListController.$inject = ['$scope', 'session', 'cohortStore', 'sortCohorts'];
+CohortListController.$inject = ['$scope', 'session', 'cohortStore'];
 
 export default CohortListController;

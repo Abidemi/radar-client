@@ -12,6 +12,12 @@ function familyHistoryControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A component for recording the family history of the current diagnosis.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function FamilyHistoryController($scope) {
     var self = this;
 

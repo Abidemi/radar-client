@@ -13,6 +13,12 @@ function plasmapheresisControllerFactory(
   $injector,
   store
 ) {
+  /**
+   * A component for recording a patients plasmapheresis treatments.
+   *
+   * @class
+   * @param {Object} $scope - angular scope.
+   */
   function PlasmapheresisController($scope) {
     var self = this;
 

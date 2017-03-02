@@ -1,10 +1,16 @@
 import angular from 'angular';
 import _ from 'lodash';
+import stable from 'stable';
+
+import compare from '../utils/compare';
+import anyValue from '../utils/any-value';
+import dateSearch from '../utils/date-search';
+import escapeRegExp from '../utils/escape-reg-exp';
 
 var DEFAULT_SORT_BY = 'id';
 var DEFAULT_PER_PAGE = 10;
 
-function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
+function listHelper($parse) {
   return {
     scope: false,
     controller: ['$scope', '$attrs', function($scope, $attrs) {
@@ -30,7 +36,6 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
         aliasSetter($scope, self);
 
         var options = $parse($attrs.listHelperOptions)($scope) || {};
-        var deep = options.deep !== false;
         var perPage = options.perPage || DEFAULT_PER_PAGE;
         var reverse = options.reverse === true;
         var sortBy = options.sortBy || DEFAULT_SORT_BY;
@@ -45,16 +50,12 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
         var page = 1;
 
         $scope.$watchCollection(function() {
-          return collectionGetter($scope) || [];
+          return collectionGetter($scope);
         }, function(value) {
-          items = value;
+          items = value || [];
           _filter();
           checkPage();
         });
-
-        $scope.$watch('items', function() {
-          _filter();
-        }, deep);
 
         _filter();
 
@@ -98,9 +99,11 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
           return reverse;
         }
 
-        /*
-          * Move back a page when the last item on the page is deleted.
-          */
+        /**
+         * Move back a page when the last item on the page is deleted.
+         *
+         * @returns {undefined}
+         */
         function checkPage() {
           var totalPages = getTotalPages();
 
@@ -114,8 +117,10 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
         }
 
         function setPage(newPage) {
-          page = newPage;
-          _paginate();
+          if (newPage > 0 && newPage <= getTotalPages()) {
+            page = newPage;
+            _paginate();
+          }
         }
 
         function getPerPage() {
@@ -155,7 +160,7 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
             };
 
             filteredItems = _.filter(filteredItems, function(x) {
-              return anyValue(x.getData(), matcher);
+              return anyValue(x, matcher);
             });
           }
 
@@ -168,9 +173,12 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
           if (sortBy !== null) {
             var getter = $parse(sortBy);
 
-            sortedItems = _.sortBy(sortedItems, function(item) {
+            sortedItems = stable(sortedItems, function(a, b) {
               // Note: AngularJS doesn't check the prototype of the locals argument
-              return getter(item, sortScope);
+              a = getter(a, sortScope);
+              b = getter(b, sortScope);
+
+              return compare(a, b);
             });
           }
 
@@ -189,7 +197,6 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
             var endIndex = page * perPage;
             paginatedItems = _.slice(sortedItems, startIndex, endIndex);
           }
-
         }
       }
 
@@ -268,7 +275,7 @@ function listHelper($parse, escapeRegExp, dateSearch, anyValue) {
   };
 }
 
-listHelper.$inject = ['$parse', 'escapeRegExp', 'dateSearch', 'anyValue'];
+listHelper.$inject = ['$parse'];
 
 function listHelperProxyFactory() {
   function ListHelperProxy(callback, params) {
@@ -327,8 +334,10 @@ function listHelperProxyFactory() {
   };
 
   ListHelperProxy.prototype.setPage = function(page) {
-    this.page = page;
-    this.load();
+    if (page > 0 && page <= this.getTotalPages()) {
+      this.page = page;
+      this.load();
+    }
   };
 
   ListHelperProxy.prototype.getPerPage = function() {

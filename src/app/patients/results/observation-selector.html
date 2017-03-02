@@ -1,12 +1,12 @@
 
 
 <div loading="loading">
-  <ul class="tabs-radar">
+  <ul class="radar-tabs">
       <li ng-repeat="group in groups" ng-class="{'active': isActive(group)}"><a href="" ng-click="setGroup(group)">{{group.shortName}}</a></li>
       <li ng-class="{'active': isActive(null)}"><a href="" ng-click="setGroup(null)">All</a></li>
   </ul>
 
-  <div list-helper="getObservations(group) as page" list-helper-options="{perPage: 5, sortBy: 'name'}" class="observation-selector">
+  <div list-helper="observations as page" list-helper-options="{perPage: 5, sortBy: 'name'}" class="observation-selector">
     <table class="table table-condensed table-striped">
       <thead>
         <tr>

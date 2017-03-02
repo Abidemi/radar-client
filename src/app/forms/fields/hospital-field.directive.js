@@ -1,11 +1,14 @@
+import sortGroups from '../../groups/sort-groups';
+
 import templateUrl from './hospital-field.html';
 
-function frmHospitalField(session, hospitalStore, sortHospitals) {
+function frmHospitalField(session, hospitalStore) {
   return {
     restrict: 'A',
     scope: {
       model: '=',
-      required: '&'
+      required: '&',
+      params: '='
     },
     templateUrl: templateUrl,
     link: function(scope) {
@@ -15,7 +18,7 @@ function frmHospitalField(session, hospitalStore, sortHospitals) {
         if (user) {
           if (user.isAdmin) {
             setHospitals([]);
-            hospitalStore.findMany().then(setHospitals);
+            hospitalStore.findMany(scope.params).then(setHospitals);
           } else {
             var hospitals = user.getHospitals();
             setHospitals(hospitals);
@@ -26,12 +29,12 @@ function frmHospitalField(session, hospitalStore, sortHospitals) {
       });
 
       function setHospitals(hospitals) {
-        scope.hospitals = sortHospitals(hospitals);
+        scope.hospitals = sortGroups(hospitals);
       }
     }
   };
 }
 
-frmHospitalField.$inject = ['session', 'hospitalStore', 'sortHospitals'];
+frmHospitalField.$inject = ['session', 'hospitalStore'];
 
 export default frmHospitalField;

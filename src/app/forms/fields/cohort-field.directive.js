@@ -1,6 +1,8 @@
+import sortGroups from '../../groups/sort-groups';
+
 import templateUrl from './cohort-field.html';
 
-function frmCohortField(sortCohorts, session, cohortStore) {
+function frmCohortField(session, cohortStore) {
   return {
     restrict: 'A',
     scope: {
@@ -10,12 +12,12 @@ function frmCohortField(sortCohorts, session, cohortStore) {
     templateUrl: templateUrl,
     link: function(scope) {
       cohortStore.findMany().then(function(cohorts) {
-        scope.cohorts = sortCohorts(cohorts);
+        scope.cohorts = sortGroups(cohorts);
       });
     }
   };
 }
 
-frmCohortField.$inject = ['sortCohorts', 'session', 'cohortStore'];
+frmCohortField.$inject = ['session', 'cohortStore'];
 
 export default frmCohortField;
